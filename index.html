@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
     <style>
+        /* Your CSS styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
@@ -136,7 +137,6 @@
         </div>
     </div>
     <script>
-        // JavaScript code (as provided in the previous response)
         let tasks = [];
 
         window.addEventListener('load', function() {
@@ -167,12 +167,22 @@
         }
 
         function editTask(index) {
-            const newTask = prompt("Enter the new task:");
-            if (newTask !== null && newTask !== '') {
-                tasks[index] = newTask.trim();
-                saveTasksToLocalStorage();
-                displayTasks();
-            }
+            const taskInput = document.getElementById('taskInput');
+            taskInput.value = tasks[index]; // Populate input field with the current task text
+            const editBtn = document.getElementById('editBtn');
+            editBtn.onclick = function() {
+                const newTask = taskInput.value.trim();
+                if (newTask !== '') {
+                    tasks[index] = newTask;
+                    saveTasksToLocalStorage();
+                    displayTasks();
+                    taskInput.value = '';
+                    editBtn.style.display = 'none';
+                } else {
+                    alert("Please enter a task.");
+                }
+            };
+            editBtn.style.display = 'inline'; // Display the edit button
         }
 
         function displayTasks() {
@@ -183,7 +193,7 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${task}</span>
-                    <button onclick="editTask(${index})">Edit</button>
+                    <button onclick="editTask(${index})" class="edit-btn">Edit</button>
                     <button onclick="removeTask(${index})" class="remove-btn">Remove</button>
                 `;
                 taskList.appendChild(li);
@@ -208,7 +218,7 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${task}</span>
-                    <button onclick="editTask(${index})">Edit</button>
+                    <button onclick="editTask(${index})" class="edit-btn">Edit</button>
                     <button onclick="removeTask(${index})" class="remove-btn">Remove</button>
                 `;
                 taskList.appendChild(li);
