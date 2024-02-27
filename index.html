@@ -20,18 +20,19 @@
         }
 
         .container {
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 100%;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 24px;
         }
 
         .input-container {
             display: flex;
+            flex-wrap: wrap;
             margin-bottom: 10px;
         }
 
@@ -41,16 +42,19 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
+            margin-bottom: 10px;
         }
 
         .input-container button {
+            flex: 0 0 auto;
             padding: 10px 20px;
-            margin-left: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
         }
 
         .input-container button:hover {
@@ -66,27 +70,51 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             background-color: #fff;
+        }
+
+        .buttons-container {
             display: flex;
             justify-content: space-between;
         }
 
-        .remove-btn {
-            background-color: #f44336;
-            color: white;
+        .buttons-container button {
+            padding: 8px 16px;
             border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 18px;
+            border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             outline: none;
         }
 
+        .remove-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
         .remove-btn:hover {
             background-color: #ff5b52;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #ffca28;
+        }
+
+        @media screen and (max-width: 600px) {
+            .input-container {
+                flex-direction: column;
+            }
+
+            .input-container button {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -108,9 +136,9 @@
         </div>
     </div>
     <script>
+        // JavaScript code (as provided in the previous response)
         let tasks = [];
 
-        // Load tasks from local storage on page load
         window.addEventListener('load', function() {
             const storedTasks = localStorage.getItem('tasks');
             if (storedTasks) {
@@ -138,6 +166,15 @@
             displayTasks();
         }
 
+        function editTask(index) {
+            const newTask = prompt("Enter the new task:");
+            if (newTask !== null && newTask !== '') {
+                tasks[index] = newTask.trim();
+                saveTasksToLocalStorage();
+                displayTasks();
+            }
+        }
+
         function displayTasks() {
             const taskList = document.getElementById('taskList');
             taskList.innerHTML = '';
@@ -146,7 +183,8 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${task}</span>
-                    <button class="remove-btn" onclick="removeTask(${index})"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="editTask(${index})">Edit</button>
+                    <button onclick="removeTask(${index})" class="remove-btn">Remove</button>
                 `;
                 taskList.appendChild(li);
             });
@@ -170,6 +208,7 @@
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${task}</span>
+                    <button onclick="editTask(${index})">Edit</button>
                     <button onclick="removeTask(${index})" class="remove-btn">Remove</button>
                 `;
                 taskList.appendChild(li);
